@@ -1,22 +1,36 @@
 library(httr)
 library(jsonlite)
 library(tidyverse)
+library(readr)
+
+ski_areas <- read_csv("data_raw/ski_areas.csv")
 
 CHski_areas <- ski_areas %>% 
-  filter(ski_areas$countries == "Switzerland")
+  filter(countries == "Switzerland")
 
+df_per_api <- CHski_areas %>%
+  select(lat, lng) %>%
+  rename(latitude = lat, longitude = lng) %>%
+  na.omit()
 
+# richiesta API ----
 
-# 1. Seleziona solo le colonne necessarie e rinominale se serve
-# Supponiamo che il tuo df si chiami 'mio_df'
-df_per_api <- CHski_areas[, c("lat", "lng")]
-colnames(df_per_api) <- c("latitude", "longitude")
+body <- list(locations = df_per_api)
 
-# 2. Converti in formato JSON nidificato sotto la chiave "results"
-json_output <- list(results = df_per_api)
-json_finale <- toJSON(json_output, dataframe = "rows", pretty = TRUE)
+response <- POST(
+  "https://api.opentopodata.org/v1/eudem25m",
+  body = body,
+  encode = "json"
+)
 
-# Visualizza il risultato
-cat(json_finale)
+data <- fromJSON(content(response, "text", encoding = "UTF-8"))
 
+df_per_api$elevation <- data$results$elevation
 
+# Merge dei dati API con il dataset originale ----
+
+CHski_areas <- CHski_areas %>%
+  left_join(df_per_api,
+            by = c("lat" = "latitude", "lng" = "longitude"))
+
+View(CHski_areas)
