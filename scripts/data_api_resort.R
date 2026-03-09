@@ -3,6 +3,7 @@ library(jsonlite)
 library(tidyverse)
 library(readr)
 
+# dati ski area----
 ski_areas <- read_csv("data_raw/ski_areas.csv")
 
 CHski_areas <- ski_areas %>% 
