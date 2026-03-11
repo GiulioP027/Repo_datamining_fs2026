@@ -24,21 +24,22 @@ The project should demonstrate:
 
 ## Research Question
 
-*(Replace with your own question)*
-
-Example:
-- How frequently do political speeches contain populist rhetoric?
+Which Swiss ski resorts are most at risk of closing in the next decade due to declining snow reliability, and what is the estimated economic impact on the regional tourism economy?
 
 
 ## Data Source
 
-Describe the data source here.
+- API:[ https://example-api.com](https://open-meteo.com/)
+- Documentation: [https://example-api.com/docs](https://open-meteo.com/en/docs)
+- Access method: api request by From r and the openmeteo package
 
-Example:
+- API
+- Documentation:
+- Access method:
 
-- API: https://example-api.com
-- Documentation: https://example-api.com/docs
-- Access method: HTTP GET requests
+- API:
+- Documentation:
+- Access Method:
 
 
 ## Repository Structure
