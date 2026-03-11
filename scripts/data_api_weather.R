@@ -4,6 +4,7 @@ library(dplyr)
 library(purrr)
 library(readr)
 library(openmeteo)
+library(tidyr)
 
 # load open meteo ----
 writeLines('PATH="${RTOOLS45_HOME}\\usr\\bin;${PATH}"', con = "~/.Renviron")
@@ -162,36 +163,81 @@ df_Chski_meteo <- bind_cols(df_Chski, weather_results)
 View(df_Chski_meteo)
 
 # tentativo 2 ----
-# Funzione per ottenere dati annuali (più robusta)
-get_annual_evolution <- function(lat, lng, name) {
-  tryCatch({
-    # Chiamiamo i dati giornalieri
-    data <- weather_history(
-      location = c(lat, lng),
-      start = "2020-01-01",
-      end = "2024-12-31", # Escludiamo il 2025 se non è ancora completo/affidabile
-      daily = c("temperature_2m_mean", "snowfall_sum"),
-      response_units = list(temperature_unit = "celsius", precipitation_unit = "mm")
-    )
-    
-    # Trasformiamo in dati annuali subito per risparmiare memoria
-    res <- data %>%
-      mutate(year = format(as.Date(date), "%Y")) %>%
-      group_by(year) %>%
-      summarise(
-        temp_media = mean(daily_temperature_2m_mean, na.rm = TRUE),
-        neve_totale_cm = sum(daily_snowfall_sum, na.rm = TRUE) / 10,
-        .groups = 'drop'
-      ) %>%
-      # Trasformiamo la tabella da "lunga" a "larga" per averla sulla stessa riga
-      pivot_wider(
-        names_from = year, 
-        values_from = c(temp_media, neve_totale_cm),
-        names_glue = "{.value}_{year}"
-      )
-    
-    return(res)
-  }, error = function(e) {
-    return(NULL) # Restituisce vuoto in caso di errore
-  })
-}
+
+# get_weather_raw <- function(lat, lng) {
+#   tryCatch({
+#     # Chiamata identica al tuo test che ha funzionato
+#     weather_history(
+#       location = c(lat, lng),
+#       start = "2020-01-01",
+#       end = "2024-12-31",
+#       daily = c("temperature_2m_mean", "snowfall_sum"),
+#       response_units = list(temperature_unit = "celsius", precipitation_unit = "mm")
+#     ) %>%
+#       mutate(year = format(as.Date(date), "%Y")) %>%
+#       group_by(year) %>%
+#       summarise(
+#         temp = mean(daily_temperature_2m_mean, na.rm = TRUE),
+#         neve = sum(daily_snowfall_sum, na.rm = TRUE) / 10,
+#         .groups = 'drop'
+#       )
+#   }, error = function(e) { 
+#     return(NULL) 
+#   })
+# }
+# 
+# # Selezioniamo le prime 10 e scarichiamo
+# df_risultato <- df_Chski %>%
+#   head(10) %>%
+#   mutate(clima = map2(lat, lng, ~ {
+#     message(paste("Scaricando dati per:", .y, .x)) # Vedi cosa sta facendo
+#     Sys.sleep(0.5)
+#     get_weather_raw(.x, .y)
+#   })) 
+# 
+# # Espandiamo i dati (da 1 riga a 5 righe per ogni stazione - una per anno)
+# df_long <- df_risultato %>% 
+#   tidyr::unnest(clima)
+# 
+# # Ora trasformiamolo in formato largo (una riga per stazione)
+# df_finale <- df_long %>%
+#   tidyr::pivot_wider(
+#     names_from = year, 
+#     values_from = c(temp, neve),
+#     names_glue = "{.value}_{year}"
+#   )
+# 
+# View(df_finale)
+
+# tentativo 3----
+
+# 1. Creiamo una tabella separata SOLO per il clima
+# Usiamo map invece di map2 per sicurezza, riferendoci alle colonne
+print("Inizio download... (circa 5-8 minuti per 359 resort)")
+
+df_clima_results <- df_Chski %>%
+  select(id, lat, lng) %>% # Teniamo l'ID per ricollegarli dopo
+  mutate(clima_raw = map2(lat, lng, ~ {
+    Sys.sleep(0.5) # Pausa più lunga per evitare blocchi dall'API
+    get_weather_raw(.x, .y)
+  }))
+
+# 2. Trasformiamo i risultati in formato "Largo" (una riga per ID)
+df_clima_wide <- df_clima_results %>%
+  filter(!map_lgl(clima_raw, is.null)) %>% # Rimuoviamo i NULL temporaneamente per l'unnest
+  unnest(clima_raw) %>%
+  pivot_wider(
+    names_from = year, 
+    values_from = c(temp, neve),
+    names_glue = "{.value}_{year}"
+  )
+
+# 3. UNIONE FINALE: Colleghiamo il clima al dataset originale
+# In questo modo torni ad avere 359 righe!
+df_completo_finale <- df_Chski %>%
+  left_join(df_clima_wide %>% select(-lat, -lng), by = "id")
+
+# Verifica finale
+print(paste("Righe totali:", nrow(df_completo_finale)))
+print(paste("Resort con dati meteo:", sum(!is.na(df_completo_finale$temp_2024))))
+View(df_completo_finale)
