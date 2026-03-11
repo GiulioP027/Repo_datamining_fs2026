@@ -5,6 +5,7 @@ library(purrr)
 library(readr)
 library(openmeteo)
 library(tidyr)
+library(ggplot2)
 
 # load open meteo ----
 writeLines('PATH="${RTOOLS45_HOME}\\usr\\bin;${PATH}"', con = "~/.Renviron")
@@ -241,3 +242,80 @@ df_completo_finale <- df_Chski %>%
 print(paste("Righe totali:", nrow(df_completo_finale)))
 print(paste("Resort con dati meteo:", sum(!is.na(df_completo_finale$temp_2024))))
 View(df_completo_finale)
+
+save(df_completo_finale, file = "data_preprocessed/CHski_areas_meteo.rda")
+
+#  analisi ----
+
+# trend
+
+df_analisi <- df_completo_finale %>%
+  # Teniamo solo quelli che hanno i dati meteo scaricati
+  filter(!is.na(temp_2020) & !is.na(neve_2020)) %>%
+  mutate(
+    # Variazione temperatura (Gradi Celsius)
+    delta_temp = temp_2024 - temp_2020,
+    
+    # Variazione neve (Centimetri)
+    delta_neve = neve_2024 - neve_2020,
+    
+    # Percentuale di perdita/guadagno neve
+    perc_neve = (delta_neve / neve_2020) * 100
+  )
+ggplot(df_analisi, aes(x = min_elevation_m, y = delta_neve)) +
+  geom_point(aes(color = delta_neve < 0), size = 3) +
+  geom_smooth(method = "lm", color = "black", linetype = "dashed") +
+  scale_color_manual(values = c("blue", "red"), labels = c("Aumento", "Calo")) +
+  labs(title = "Variazione Neve 2020-2024 vs Altitudine Minima",
+       x = "Altitudine alla base (m)",
+       y = "Differenza neve (cm)",
+       color = "Trend Neve") +
+  theme_minimal()
+
+
+# Resort con più neve persa,
+
+df_analisi %>% arrange(delta_neve) %>% head(5) %>% select(name, delta_neve)
+
+# Media riscaldamento
+mean(df_analisi$delta_temp, na.rm = TRUE)
+
+# Peggior anno per la neve (2022, 27.72)
+
+colMeans(df_analisi %>% select(starts_with("neve_")), na.rm = TRUE)
+
+# mappa
+install.packages("leaflet")
+library(leaflet)
+
+# 1. Definiamo i colori (Rosso per calo neve, Blu per aumento)
+pal <- colorNumeric(
+  palette = c("darkred", "red", "yellow", "lightblue", "blue"),
+  domain = df_analisi$delta_neve
+)
+
+# 2. Creiamo la mappa
+mappa_sci <- leaflet(df_analisi) %>%
+  addTiles() %>%  # Sfondo standard di OpenStreetMap
+  addCircleMarkers(
+    lng = ~lng, lat = ~lat,
+    radius = 6,
+    color = ~pal(delta_neve),
+    stroke = FALSE, fillOpacity = 0.8,
+    # Messaggio che appare cliccando sul punto
+    popup = ~paste0(
+      "<b>", name, "</b><br>",
+      "Altitudine min: ", min_elevation_m, "m<br>",
+      "Variazione Neve: ", round(delta_neve, 1), " cm<br>",
+      "Variazione Temp: +", round(delta_temp, 2), " °C"
+    )
+  ) %>%
+  addLegend(
+    "bottomright", pal = pal, values = ~delta_neve,
+    title = "Variazione Neve (cm)",
+    labFormat = labelFormat(suffix = " cm"),
+    opacity = 1
+  )
+
+# Mostra la mappa
+mappa_sci
