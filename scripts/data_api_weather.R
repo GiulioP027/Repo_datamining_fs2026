@@ -109,7 +109,7 @@ weather_data <- get_ski_weather(df_Chski$lat[1], df_Chski$lng[1])
 summary_weather <- weather_data %>%
   summarise(
     temp_media_periodo = mean(daily_temperature_2m_mean, na.rm = TRUE),
-    neve_totale_cm = sum(daily_snowfall_sum, na.rm = TRUE) / 10 # convertiamo mm in cm approssimativi
+    neve_totale_cm = sum(daily_snowfall_sum, na.rm = TRUE) / 10 
   )
 
 print(summary_weather)
@@ -120,7 +120,7 @@ get_safe_weather <- safely(get_ski_weather)
 
 results <- df_Chski %>%
   mutate(weather = map2(lat, lng, ~ {
-    Sys.sleep(0.1) # Piccola pausa per non sovraccaricare l'API gratuita
+    Sys.sleep(0.1) 
     get_safe_weather(.x, .y)
   }))
 
@@ -137,19 +137,19 @@ fetch_climate <- function(lat, lng) {
       response_units = list(temperature_unit = "celsius", precipitation_unit = "mm")
     )
     
-    # Restituiamo un piccolo dataframe con i risultati calcolati
+   
     return(data.frame(
       temp_media = mean(data$daily_temperature_2m_mean, na.rm = TRUE),
       neve_totale_cm = sum(data$daily_snowfall_sum, na.rm = TRUE) / 10
     ))
   }, error = function(e) {
-    # In caso di errore (es. coordinate errate), restituiamo valori vuoti
+   
     return(data.frame(temp_media = NA, neve_totale_cm = NA))
   })
 }
 
-# 2. Eseguiamo il ciclo su tutto il dataset
-# NOTA: Per 359 righe ci vorranno circa 3-5 minuti.
+# 2. ciclo su tutto il dataset
+
 print("Inizio download dati... attendere qualche minuto.")
 
 weather_results <- map2_df(df_Chski$lat, df_Chski$lng, function(l1, l2) {
@@ -157,10 +157,8 @@ weather_results <- map2_df(df_Chski$lat, df_Chski$lng, function(l1, l2) {
   fetch_climate(l1, l2)
 })
 
-# 3. Uniamo i risultati al dataset originale
 df_Chski_meteo <- bind_cols(df_Chski, weather_results)
 
-# Visualizziamo i risultati
 View(df_Chski_meteo)
 
 # tentativo 2 ----
@@ -212,20 +210,18 @@ View(df_Chski_meteo)
 
 # tentativo 3----
 
-# 1. Creiamo una tabella separata SOLO per il clima
-# Usiamo map invece di map2 per sicurezza, riferendoci alle colonne
 print("Inizio download... (circa 5-8 minuti per 359 resort)")
 
 df_clima_results <- df_Chski %>%
-  select(id, lat, lng) %>% # Teniamo l'ID per ricollegarli dopo
+  select(id, lat, lng) %>% 
   mutate(clima_raw = map2(lat, lng, ~ {
-    Sys.sleep(0.5) # Pausa più lunga per evitare blocchi dall'API
+    Sys.sleep(0.5) 
     get_weather_raw(.x, .y)
   }))
 
-# 2. Trasformiamo i risultati in formato "Largo" (una riga per ID)
+
 df_clima_wide <- df_clima_results %>%
-  filter(!map_lgl(clima_raw, is.null)) %>% # Rimuoviamo i NULL temporaneamente per l'unnest
+  filter(!map_lgl(clima_raw, is.null)) %>% 
   unnest(clima_raw) %>%
   pivot_wider(
     names_from = year, 
@@ -233,12 +229,11 @@ df_clima_wide <- df_clima_results %>%
     names_glue = "{.value}_{year}"
   )
 
-# 3. UNIONE FINALE: Colleghiamo il clima al dataset originale
-# In questo modo torni ad avere 359 righe!
+
 df_completo_finale <- df_Chski %>%
   left_join(df_clima_wide %>% select(-lat, -lng), by = "id")
 
-# Verifica finale
+
 print(paste("Righe totali:", nrow(df_completo_finale)))
 print(paste("Resort con dati meteo:", sum(!is.na(df_completo_finale$temp_2024))))
 View(df_completo_finale)
@@ -250,13 +245,13 @@ save(df_completo_finale, file = "data_preprocessed/CHski_areas_meteo.rda")
 # trend
 
 df_analisi <- df_completo_finale %>%
-  # Teniamo solo quelli che hanno i dati meteo scaricati
+
   filter(!is.na(temp_2020) & !is.na(neve_2020)) %>%
   mutate(
-    # Variazione temperatura (Gradi Celsius)
+    # Variazione temperatura 
     delta_temp = temp_2024 - temp_2020,
     
-    # Variazione neve (Centimetri)
+    # Variazione neve 
     delta_neve = neve_2024 - neve_2020,
     
     # Percentuale di perdita/guadagno neve
@@ -288,13 +283,12 @@ colMeans(df_analisi %>% select(starts_with("neve_")), na.rm = TRUE)
 install.packages("leaflet")
 library(leaflet)
 
-# 1. Definiamo i colori (Rosso per calo neve, Blu per aumento)
 pal <- colorNumeric(
   palette = c("darkred", "red", "yellow", "lightblue", "blue"),
   domain = df_analisi$delta_neve
 )
 
-# 2. Creiamo la mappa
+
 mappa_sci <- leaflet(df_analisi) %>%
   addTiles() %>%  # Sfondo standard di OpenStreetMap
   addCircleMarkers(
@@ -302,7 +296,7 @@ mappa_sci <- leaflet(df_analisi) %>%
     radius = 6,
     color = ~pal(delta_neve),
     stroke = FALSE, fillOpacity = 0.8,
-    # Messaggio che appare cliccando sul punto
+
     popup = ~paste0(
       "<b>", name, "</b><br>",
       "Altitudine min: ", min_elevation_m, "m<br>",
@@ -317,5 +311,5 @@ mappa_sci <- leaflet(df_analisi) %>%
     opacity = 1
   )
 
-# Mostra la mappa
+
 mappa_sci
