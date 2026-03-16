@@ -161,29 +161,29 @@ df_Chski_meteo <- bind_cols(df_Chski, weather_results)
 
 View(df_Chski_meteo)
 
-# tentativo 2 ----
+# Funzione get weather
 
-# get_weather_raw <- function(lat, lng) {
-#   tryCatch({
-#     # Chiamata identica al tuo test che ha funzionato
-#     weather_history(
-#       location = c(lat, lng),
-#       start = "2020-01-01",
-#       end = "2024-12-31",
-#       daily = c("temperature_2m_mean", "snowfall_sum"),
-#       response_units = list(temperature_unit = "celsius", precipitation_unit = "mm")
-#     ) %>%
-#       mutate(year = format(as.Date(date), "%Y")) %>%
-#       group_by(year) %>%
-#       summarise(
-#         temp = mean(daily_temperature_2m_mean, na.rm = TRUE),
-#         neve = sum(daily_snowfall_sum, na.rm = TRUE) / 10,
-#         .groups = 'drop'
-#       )
-#   }, error = function(e) { 
-#     return(NULL) 
-#   })
-# }
+get_weather_raw <- function(lat, lng) {
+  tryCatch({
+    # Chiamata identica al tuo test che ha funzionato
+    weather_history(
+      location = c(lat, lng),
+      start = "2020-01-01",
+      end = "2024-12-31",
+      daily = c("temperature_2m_mean", "snowfall_sum"),
+      response_units = list(temperature_unit = "celsius", precipitation_unit = "mm")
+    ) %>%
+      mutate(year = format(as.Date(date), "%Y")) %>%
+      group_by(year) %>%
+      summarise(
+        temp = mean(daily_temperature_2m_mean, na.rm = TRUE),
+        neve = sum(daily_snowfall_sum, na.rm = TRUE) / 10,
+        .groups = 'drop'
+      )
+  }, error = function(e) {
+    return(NULL)
+  })
+}
 # 
 # # Selezioniamo le prime 10 e scarichiamo
 # df_risultato <- df_Chski %>%
@@ -238,7 +238,8 @@ print(paste("Righe totali:", nrow(df_completo_finale)))
 print(paste("Resort con dati meteo:", sum(!is.na(df_completo_finale$temp_2024))))
 View(df_completo_finale)
 
-save(df_completo_finale, file = "data_preprocessed/CHski_areas_meteo.rda")
+save(df_completo_finale, file = "data_preprocessed/df_completo_finale.rda")
+
 
 #  analisi ----
 
@@ -284,7 +285,7 @@ install.packages("leaflet")
 library(leaflet)
 
 pal <- colorNumeric(
-  palette = c("darkred", "red", "yellow", "lightblue", "blue"),
+  palette = c("darkred", "red","pink", "yellow", "lightgreen", "lightblue", "blue"),
   domain = df_analisi$delta_neve
 )
 
@@ -295,7 +296,7 @@ mappa_sci <- leaflet(df_analisi) %>%
     lng = ~lng, lat = ~lat,
     radius = 6,
     color = ~pal(delta_neve),
-    stroke = FALSE, fillOpacity = 0.8,
+    stroke = FALSE, fillOpacity = 1,
 
     popup = ~paste0(
       "<b>", name, "</b><br>",
@@ -313,3 +314,6 @@ mappa_sci <- leaflet(df_analisi) %>%
 
 
 mappa_sci
+
+
+
