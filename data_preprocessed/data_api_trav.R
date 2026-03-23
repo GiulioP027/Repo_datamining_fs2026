@@ -201,6 +201,9 @@ df_localities_clean <- mapping_complete %>%
   mutate(locality_key = clean_name(municipality_bfs_final)) %>%
   distinct(name, localities, locality_key)
 
+df_localities_clean <- df_localities_clean %>%
+  distinct(name, locality_key)
+
 
 # hotel_df----
 
@@ -301,17 +304,31 @@ hotel_by_resort_year <- df_localities_clean %>%
     .groups = "drop"
   )
 
+hotel_by_resort_year <- hotel_by_resort_year %>%
+  filter(!is.na(year))
+
 turism_by_resort_year <- df_localities_clean %>%
   left_join(
     turism_yearly,
     by = c("locality_key" = "municipality_key"),
     relationship = "many-to-many"
   ) %>%
+  filter(!is.na(year)) %>%
   group_by(name, year) %>%
   summarise(
-    across(where(is.numeric), ~ sum(.x, na.rm = TRUE)),
+    establishments = sum(establishments, na.rm = TRUE),
+    rooms = sum(rooms, na.rm = TRUE),
+    beds = sum(beds, na.rm = TRUE),
+    arrivals = sum(arrivals, na.rm = TRUE),
+    overnight_stays = sum(overnight_stays, na.rm = TRUE),
+    room_nights = sum(room_nights, na.rm = TRUE),
+    room_occupancy = mean(room_occupancy, na.rm = TRUE),
+    bed_occupancy = mean(bed_occupancy, na.rm = TRUE),
     .groups = "drop"
   )
+
+turism_by_resort_year <- turism_by_resort_year %>%
+  filter(!is.na(year))
 
 hotel_cols <- setdiff(names(hotel_by_resort_year), c("name", "year"))
 turism_cols <- setdiff(names(turism_by_resort_year), c("name", "year"))
@@ -326,7 +343,16 @@ hotel_by_resort_wide <- hotel_by_resort_year %>%
 turism_by_resort_wide <- turism_by_resort_year %>%
   pivot_wider(
     names_from = year,
-    values_from = all_of(turism_cols),
+    values_from = c(
+      establishments,
+      rooms,
+      beds,
+      arrivals,
+      overnight_stays,
+      room_nights,
+      room_occupancy,
+      bed_occupancy
+    ),
     names_glue = "{.value}_{year}"
   )
 
@@ -335,5 +361,8 @@ turism_by_resort_wide <- turism_by_resort_year %>%
 df_analysis_final <- df_analysis %>%
   left_join(hotel_by_resort_wide, by = "name") %>%
   left_join(turism_by_resort_wide, by = "name")
+
+View(df_analysis_final)
+
 
 
