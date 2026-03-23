@@ -77,6 +77,9 @@ clean_name <- function(x) {
 df_localities <- df_localities %>%
   mutate(locality_key = clean_name(localities))
 
+df_localities_clean <- df_localities %>%
+  distinct(name, locality_key)
+
 # hotel_df----
 
 raw_hotel <- fromJSON("data_raw/hotel_df.json")
@@ -131,9 +134,83 @@ df_turism <- expand.grid(
   ) %>%
   select(year, month, municipality, municipality_key, indicator, value)
 
-# tieni solo le località che ti servono
+
 df_turism_needed <- df_turism %>%
   semi_join(
     df_localities %>% distinct(locality_key),
     by = c("municipality_key" = "locality_key")
   )
+
+# annuali
+
+hotel_yearly <- df_hotel_needed %>%
+  filter(month == "YYYY") %>%
+  select(year, municipality_key, indicator, value) %>%
+  group_by(year, municipality_key, indicator) %>%
+  summarise(value = sum(value, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(
+    names_from = indicator,
+    values_from = value
+  ) %>%
+  clean_names()
+
+turism_yearly <- df_turism_needed %>%
+  filter(month == "YYYY") %>%
+  select(year, municipality_key, indicator, value) %>%
+  group_by(year, municipality_key, indicator) %>%
+  summarise(value = sum(value, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(
+    names_from = indicator,
+    values_from = value
+  ) %>%
+  clean_names()
+
+# municipality + resort
+
+hotel_by_resort_year <- df_localities_clean %>%
+  left_join(
+    hotel_yearly,
+    by = c("locality_key" = "municipality_key"),
+    relationship = "many-to-many"
+  ) %>%
+  group_by(name, year) %>%
+  summarise(
+    across(where(is.numeric), ~ sum(.x, na.rm = TRUE)),
+    .groups = "drop"
+  )
+
+turism_by_resort_year <- df_localities_clean %>%
+  left_join(
+    turism_yearly,
+    by = c("locality_key" = "municipality_key"),
+    relationship = "many-to-many"
+  ) %>%
+  group_by(name, year) %>%
+  summarise(
+    across(where(is.numeric), ~ sum(.x, na.rm = TRUE)),
+    .groups = "drop"
+  )
+
+hotel_cols <- setdiff(names(hotel_by_resort_year), c("name", "year"))
+turism_cols <- setdiff(names(turism_by_resort_year), c("name", "year"))
+
+hotel_by_resort_wide <- hotel_by_resort_year %>%
+  pivot_wider(
+    names_from = year,
+    values_from = all_of(hotel_cols),
+    names_glue = "{.value}_{year}"
+  )
+
+turism_by_resort_wide <- turism_by_resort_year %>%
+  pivot_wider(
+    names_from = year,
+    values_from = all_of(turism_cols),
+    names_glue = "{.value}_{year}"
+  )
+
+# merge
+
+df_analysis_final <- df_analysis %>%
+  left_join(hotel_by_resort_wide, by = "name") %>%
+  left_join(turism_by_resort_wide, by = "name")
+
