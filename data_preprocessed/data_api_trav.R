@@ -74,11 +74,133 @@ clean_name <- function(x) {
     str_squish()
 }
 
-df_localities <- df_localities %>%
-  mutate(locality_key = clean_name(localities))
+# località
 
-df_localities_clean <- df_localities %>%
-  distinct(name, locality_key)
+df_localities_all <- df_analysis %>%
+  select(name, localities) %>%
+  distinct() %>%
+  mutate(localities = str_split(localities, ";")) %>%
+  unnest(localities) %>%
+  mutate(
+    localities = str_trim(localities),
+    locality_key = clean_name(localities)
+  ) %>%
+  distinct(name, localities, locality_key)
+
+# lista comuni bfs jason
+
+bfs_municipalities <- bind_rows(
+  df_hotel %>% distinct(municipality),
+  df_turism %>% distinct(municipality)
+) %>%
+  distinct() %>%
+  mutate(municipality_key = clean_name(municipality)) %>%
+  arrange(municipality)
+
+# mappatura
+
+manual_lookup <- tibble::tribble(
+  ~localities,            ~municipality_bfs,
+  "Verbier",              "Val de Bagnes",
+  "Le Châble",            "Val de Bagnes",
+  "Bruson",               "Val de Bagnes",
+  "Champsec",             "Val de Bagnes",
+  "Sarreyer",             "Val de Bagnes",
+  "Lourtier",             "Val de Bagnes",
+  
+  "Haute-Nendaz",         "Nendaz",
+  "Siviez",               "Nendaz",
+  "Clèbes",               "Nendaz",
+  
+  "Les Mayens-de-Sion",   "Sion",
+  
+  "Davos Dorf",           "Davos",
+  "Davos Platz",          "Davos",
+  "Davos Wolfgang",       "Davos",
+  "Clavadel",             "Davos",
+  "Frauenkirch",          "Davos",
+  "Glaris",               "Davos",
+  
+  "Serneus Dorf",         "Klosters",
+  "Saas im Prättigau",    "Klosters",
+  
+  "Champex",              "Orsières",
+  "Les Diablerets",       "Ormont-Dessus",
+  "Gsteig bei Gstaad",    "Saanen",
+  
+  "Albinen",              "Leukerbad",
+  
+  "Rothwald",             "Goms",
+  "Binn",                 "Goms",
+  
+  "Silvaplana-Surlej",    "Silvaplana",
+  "Plaun da Lej",         "Silvaplana",
+  
+  "Tarasp",               "Scuol",
+  "Sent",                 "Scuol",
+  "Ftan",                 "Scuol",
+  
+  "Rosswald",             "Ried-Brig"
+)
+
+# tab mappata
+
+mapping_complete <- df_localities_all %>%
+  left_join(manual_lookup, by = "localities") %>%
+  mutate(
+    manual_key = if_else(!is.na(municipality_bfs), clean_name(municipality_bfs), NA_character_)
+  ) %>%
+  left_join(
+    bfs_municipalities %>%
+      transmute(
+        municipality_exact = as.character(municipality),
+        locality_key = as.character(municipality_key)
+      ),
+    by = "locality_key"
+  ) %>%
+  left_join(
+    bfs_municipalities %>%
+      transmute(
+        municipality_manual_valid = as.character(municipality),
+        manual_key = as.character(municipality_key)
+      ),
+    by = "manual_key"
+  ) %>%
+  mutate(
+    municipality_exact = as.character(municipality_exact),
+    municipality_manual_valid = as.character(municipality_manual_valid),
+    municipality_bfs_final = coalesce(municipality_manual_valid, municipality_exact),
+    municipality_bfs_final = as.character(municipality_bfs_final),
+    match_type = case_when(
+      !is.na(municipality_manual_valid) ~ "manual",
+      !is.na(municipality_exact) ~ "exact",
+      TRUE ~ "unmatched"
+    )
+  ) %>%
+  select(
+    name,
+    localities,
+    locality_key,
+    municipality_bfs_final,
+    match_type
+  ) %>%
+  arrange(match_type, name, localities)
+write_csv(mapping_complete, "data_preprocessed/mapping_localities_bfs.csv")
+
+# mapping_complete %>%
+#   count(match_type)
+# mapping_complete %>%
+#   filter(match_type == "unmatched") %>%
+#   select(name, localities) %>%
+#   distinct() %>%
+#   print(n = 300)
+
+
+df_localities_clean <- mapping_complete %>%
+  filter(!is.na(municipality_bfs_final)) %>%
+  mutate(locality_key = clean_name(municipality_bfs_final)) %>%
+  distinct(name, localities, locality_key)
+
 
 # hotel_df----
 
@@ -213,4 +335,5 @@ turism_by_resort_wide <- turism_by_resort_year %>%
 df_analysis_final <- df_analysis %>%
   left_join(hotel_by_resort_wide, by = "name") %>%
   left_join(turism_by_resort_wide, by = "name")
+
 

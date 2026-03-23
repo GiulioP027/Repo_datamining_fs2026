@@ -1,0 +1,216 @@
+name,localities,locality_key,municipality_bfs_final,match_type
+4 Vallées – Verbier/La Tzoumaz/Nendaz/Veysonnaz/Thyon,Orsières,orsières,Orsières,exact
+Adelboden - TschentenAlp,Adelboden,adelboden,Adelboden,exact
+Beckenhalde,St. Gallen,st gallen,St. Gallen,exact
+Champex-Lac,Orsières,orsières,Orsières,exact
+Corvatsch-Furtschellas,Celerina/Schlarigna,celerina schlarigna,Celerina/Schlarigna,exact
+Corvatsch-Furtschellas,Pontresina,pontresina,Pontresina,exact
+Corvatsch-Furtschellas,Samedan,samedan,Samedan,exact
+Corvatsch-Furtschellas,St. Moritz,st moritz,St. Moritz,exact
+Corvatsch-Furtschellas,Zernez,zernez,Zernez,exact
+Evolène,Evolène,evolène,Evolène,exact
+Gais,Gais,gais,Gais,exact
+Hapfere,Plaffeien,plaffeien,Plaffeien,exact
+Leukerbad (Torrent),Leukerbad,leukerbad,Leukerbad,exact
+Leukerbad - Gemmipass,Leukerbad,leukerbad,Leukerbad,exact
+Madrisa,Klosters,klosters,Klosters,exact
+Nollen,Unterägeri,unterägeri,Unterägeri,exact
+Parsenn,Klosters,klosters,Klosters,exact
+Pilatus,Kriens,kriens,Kriens,exact
+Pizol,Bad Ragaz,bad ragaz,Bad Ragaz,exact
+Pontresina,Pontresina,pontresina,Pontresina,exact
+Rigi,Weggis,weggis,Weggis,exact
+Saas Grund,Saas-Grund,saas grund,Saas-Grund,exact
+Sattel-Hochstuckli,Schwyz,schwyz,Schwyz,exact
+Schnabelsberg / Einsiedeln,Einsiedeln,einsiedeln,Einsiedeln,exact
+Scuol Motta Naluns,Scuol,scuol,Scuol,exact
+Zugerberg,Unterägeri,unterägeri,Unterägeri,exact
+4 Vallées – Verbier/La Tzoumaz/Nendaz/Veysonnaz/Thyon,Bruson,bruson,Val de Bagnes,manual
+4 Vallées – Verbier/La Tzoumaz/Nendaz/Veysonnaz/Thyon,Champsec,champsec,Val de Bagnes,manual
+4 Vallées – Verbier/La Tzoumaz/Nendaz/Veysonnaz/Thyon,Clèbes,clèbes,Nendaz,manual
+4 Vallées – Verbier/La Tzoumaz/Nendaz/Veysonnaz/Thyon,Haute-Nendaz,haute nendaz,Nendaz,manual
+4 Vallées – Verbier/La Tzoumaz/Nendaz/Veysonnaz/Thyon,Le Châble,le châble,Val de Bagnes,manual
+4 Vallées – Verbier/La Tzoumaz/Nendaz/Veysonnaz/Thyon,Les Mayens-de-Sion,les mayens de sion,Sion,manual
+4 Vallées – Verbier/La Tzoumaz/Nendaz/Veysonnaz/Thyon,Sarreyer,sarreyer,Val de Bagnes,manual
+4 Vallées – Verbier/La Tzoumaz/Nendaz/Veysonnaz/Thyon,Siviez,siviez,Nendaz,manual
+4 Vallées – Verbier/La Tzoumaz/Nendaz/Veysonnaz/Thyon,Verbier,verbier,Val de Bagnes,manual
+Champex-Lac,Champex,champex,Orsières,manual
+Glacier 3000,Gsteig bei Gstaad,gsteig bei gstaad,Saanen,manual
+Glacier 3000,Les Diablerets,les diablerets,Ormont-Dessus,manual
+Jakobshorn,Clavadel,clavadel,Davos,manual
+Jakobshorn,Davos Dorf,davos dorf,Davos,manual
+Jakobshorn,Davos Platz,davos platz,Davos,manual
+Leukerbad (Torrent),Albinen,albinen,Leukerbad,manual
+Lourtier,Lourtier,lourtier,Val de Bagnes,manual
+Madrisa,Saas im Prättigau,saas im prättigau,Klosters,manual
+Parsenn,Clavadel,clavadel,Davos,manual
+Parsenn,Davos Dorf,davos dorf,Davos,manual
+Parsenn,Davos Platz,davos platz,Davos,manual
+Parsenn,Davos Wolfgang,davos wolfgang,Davos,manual
+Parsenn,Frauenkirch,frauenkirch,Davos,manual
+Parsenn,Glaris,glaris,Davos,manual
+Parsenn,Saas im Prättigau,saas im prättigau,Klosters,manual
+Parsenn,Serneus Dorf,serneus dorf,Klosters,manual
+Pischa,Davos Dorf,davos dorf,Davos,manual
+Rothwald,Rothwald,rothwald,Goms,manual
+Schatzalp/Strela,Davos Dorf,davos dorf,Davos,manual
+Schatzalp/Strela,Davos Platz,davos platz,Davos,manual
+Scuol Motta Naluns,Ftan,ftan,Scuol,manual
+Scuol Motta Naluns,Sent,sent,Scuol,manual
+Tarasp,Tarasp,tarasp,Scuol,manual
+Wilern,Binn,binn,Goms,manual
+4 Vallées – Verbier/La Tzoumaz/Nendaz/Veysonnaz/Thyon,Hérémence,hérémence,NA,unmatched
+4 Vallées – Verbier/La Tzoumaz/Nendaz/Veysonnaz/Thyon,Isérables,isérables,NA,unmatched
+4 Vallées – Verbier/La Tzoumaz/Nendaz/Veysonnaz/Thyon,La Tzoumaz,la tzoumaz,NA,unmatched
+4 Vallées – Verbier/La Tzoumaz/Nendaz/Veysonnaz/Thyon,Les Collons,les collons,NA,unmatched
+4 Vallées – Verbier/La Tzoumaz/Nendaz/Veysonnaz/Thyon,Saxon,saxon,NA,unmatched
+4 Vallées – Verbier/La Tzoumaz/Nendaz/Veysonnaz/Thyon,Thyon,thyon,NA,unmatched
+4 Vallées – Verbier/La Tzoumaz/Nendaz/Veysonnaz/Thyon,Veysonnaz,veysonnaz,NA,unmatched
+Aela (Maloja),Maloja District,maloja district,NA,unmatched
+Avers,Am Bach,am bach,NA,unmatched
+Avers,Juf,juf,NA,unmatched
+Baeretswil,Bäretswil,bäretswil,NA,unmatched
+Baulmes,Baulmes,baulmes,NA,unmatched
+Bosco Gurin – Grossalp,Bosco Gurin,bosco gurin,NA,unmatched
+Bugnenets-Savagnières,Le Pâquier,le pâquier,NA,unmatched
+Bugnenets-Savagnières,Les Pontins,les pontins,NA,unmatched
+Bugnenets-Savagnières,Nods,nods,NA,unmatched
+Campo (Blenio),Campo,campo,NA,unmatched
+Campo (Blenio),Ghirone,ghirone,NA,unmatched
+Champex-Lac,Bovernier,bovernier,NA,unmatched
+Chuderhüsi,Rothenbach,rothenbach,NA,unmatched
+Château-d'Oex,Chateau-d'Oex,chateau d oex,NA,unmatched
+Corvatsch-Furtschellas,Bever,bever,NA,unmatched
+Corvatsch-Furtschellas,Brail,brail,NA,unmatched
+Corvatsch-Furtschellas,Champfèr,champfèr,NA,unmatched
+Corvatsch-Furtschellas,Cinuos-chel,cinuos chel,NA,unmatched
+Corvatsch-Furtschellas,Fex,fex,NA,unmatched
+Corvatsch-Furtschellas,La Punt-Chamues-ch,la punt chamues ch,NA,unmatched
+Corvatsch-Furtschellas,Lavin,lavin,NA,unmatched
+Corvatsch-Furtschellas,Madulain,madulain,NA,unmatched
+Corvatsch-Furtschellas,Maloja District,maloja district,NA,unmatched
+Corvatsch-Furtschellas,Plaun da Lej,plaun da lej,NA,unmatched
+Corvatsch-Furtschellas,S-chanf,s chanf,NA,unmatched
+Corvatsch-Furtschellas,Sils-Segl Maria,sils segl maria,NA,unmatched
+Corvatsch-Furtschellas,Sils/segl Baselgia,sils segl baselgia,NA,unmatched
+Corvatsch-Furtschellas,Silvaplana,silvaplana,NA,unmatched
+Corvatsch-Furtschellas,Silvaplana-Surlej,silvaplana surlej,NA,unmatched
+Corvatsch-Furtschellas,Susch,susch,NA,unmatched
+Corvatsch-Furtschellas,Zuoz,zuoz,NA,unmatched
+Dent de Vaulion – Le Morez,Vaulion,vaulion,NA,unmatched
+Ebenalp-Horn,Schwende,schwende,NA,unmatched
+Ebenalp-Horn,Wasserauen,wasserauen,NA,unmatched
+Ebenalp-Horn,Weissbad,weissbad,NA,unmatched
+Eigenthal,Eigenthal,eigenthal,NA,unmatched
+Eigenthal - Schwarzenberg,Eigenthal,eigenthal,NA,unmatched
+Eigenthal - Schwarzenberg,Schwarzenberg,schwarzenberg,NA,unmatched
+Evolène,Euseigne,euseigne,NA,unmatched
+Evolène,Lannaz,lannaz,NA,unmatched
+Feldenmaas,Affoltern am Albis,affoltern am albis,NA,unmatched
+Feldenmaas,Bonstetten,bonstetten,NA,unmatched
+Feldenmaas,Hedingen,hedingen,NA,unmatched
+Gantrisch - Gurnigel,Rüti bei Riggisberg,rüti bei riggisberg,NA,unmatched
+Gantrisch - Gurnigel,Sangernboden,sangernboden,NA,unmatched
+Gibloux,Grangettes-près-Romont,grangettes près romont,NA,unmatched
+Gibloux,Le Chatelard-pres-Romont,le chatelard pres romont,NA,unmatched
+Gibloux,Marsens,marsens,NA,unmatched
+Gibloux,Maules,maules,NA,unmatched
+Gibloux,Riaz,riaz,NA,unmatched
+Gibloux,Romanens,romanens,NA,unmatched
+Gibloux,Sorens,sorens,NA,unmatched
+Gislifluh,Auenstein,auenstein,NA,unmatched
+Gislifluh,Oberflachs,oberflachs,NA,unmatched
+Gislifluh,Thalheim,thalheim,NA,unmatched
+Glacier 3000,Aven,aven,NA,unmatched
+Glacier 3000,Savièse,savièse,NA,unmatched
+Grüsch-Danusa,Furna,furna,NA,unmatched
+Grüsch-Danusa,Grüsch,grüsch,NA,unmatched
+Guldenen - Pfannenstiel,Egg b. Zürich,egg b zürich,NA,unmatched
+Guldenen - Pfannenstiel,Forch (südl. Teil),forch,NA,unmatched
+Guldenen - Pfannenstiel,Meilen,meilen,NA,unmatched
+Heimenschwand,Heimenschwand,heimenschwand,NA,unmatched
+Hochwang,Furna,furna,NA,unmatched
+Hochwang,St. Peter,st peter,NA,unmatched
+Hohe Winde,Beinwil,beinwil,NA,unmatched
+Jaunpass,Boltigen,boltigen,NA,unmatched
+Jeizinen,Bratsch,bratsch,NA,unmatched
+Jeizinen,Erschmatt,erschmatt,NA,unmatched
+Jeizinen,Gampel,gampel,NA,unmatched
+Kaltbrunn,Kaltbrunn,kaltbrunn,NA,unmatched
+Kaltbrunn,Rufi,rufi,NA,unmatched
+Krinau,Krinau,krinau,NA,unmatched
+La Berra,Cerniat,cerniat,NA,unmatched
+La Berra,La Roche,la roche,NA,unmatched
+La Forclaz,La Forclaz,la forclaz,NA,unmatched
+La Forclaz,La Sage,la sage,NA,unmatched
+La Trélasse,La Cure,la cure,NA,unmatched
+Langenbruck,Langenbruck,langenbruck,NA,unmatched
+Les Marecottes,Les Marécottes,les marécottes,NA,unmatched
+Les Mosses,La Comballaz,la comballaz,NA,unmatched
+Les Mosses,La Lécherette,la lécherette,NA,unmatched
+Les Mosses,Les Mosses,les mosses,NA,unmatched
+Les Pléiades,Blonay,blonay,NA,unmatched
+Les Pléiades,St-Legier-La Chiesaz,st legier la chiesaz,NA,unmatched
+Les Prés-d'Orvin,Les Pres-d'Orvin,les pres d orvin,NA,unmatched
+Malleray - Les Orvalles,Malleray,malleray,NA,unmatched
+Maloja,Maloja District,maloja district,NA,unmatched
+Mörlialp,Giswil,giswil,NA,unmatched
+Müsella – La Punt,La Punt-Chamues-ch,la punt chamues ch,NA,unmatched
+Netschbuehl Eggiwill,Eggiwil,eggiwil,NA,unmatched
+Obermutten,Obermutten,obermutten,NA,unmatched
+Oberwangen,Dietschwil,dietschwil,NA,unmatched
+Oberwangen,Kirchberg,kirchberg,NA,unmatched
+Oberwangen,Oberwangen,oberwangen,NA,unmatched
+Oberwil Rossberg,Oberwil im Simmental,oberwil im simmental,NA,unmatched
+Oetwil-Hombrechtikon,Egg b. Zürich,egg b zürich,NA,unmatched
+Oetwil-Hombrechtikon,Hombrechtikon,hombrechtikon,NA,unmatched
+Oetwil-Hombrechtikon,Männedorf,männedorf,NA,unmatched
+Oetwil-Hombrechtikon,Oetwil am See,oetwil am see,NA,unmatched
+Oetwil-Hombrechtikon,Stäfa,stäfa,NA,unmatched
+Pany,Pany,pany,NA,unmatched
+Parsenn,Conters im Prättigau,conters im prättigau,NA,unmatched
+Parsenn,Küblis,küblis,NA,unmatched
+Parsenn,Langwies,langwies,NA,unmatched
+Pilatus,Hergiswil,hergiswil,NA,unmatched
+Pizol,Wangs,wangs,NA,unmatched
+Regensberg,Regensberg,regensberg,NA,unmatched
+Ricken,Ricken,ricken,NA,unmatched
+Rigi,Rigi Kaltbad,rigi kaltbad,NA,unmatched
+Rigi,Rigi Kloesterli,rigi kloesterli,NA,unmatched
+Rigi,Rigi Kulm,rigi kulm,NA,unmatched
+Rigi,Rigi Staffel,rigi staffel,NA,unmatched
+Rosswald,Ried-Brig,ried brig,NA,unmatched
+Rosswald,Rosswald,rosswald,NA,unmatched
+Rosswald,Termen,termen,NA,unmatched
+Saas Grund,Saas-Balen,saas balen,NA,unmatched
+Saas-Almagell - Furggstalden/Heidbodme,Saas-Almagell,saas almagell,NA,unmatched
+Saint George,Gimel,gimel,NA,unmatched
+Saint George,Longirod,longirod,NA,unmatched
+Saint George,St-George,st george,NA,unmatched
+Sarn Heinzenberg,Portein,portein,NA,unmatched
+Sarn Heinzenberg,Praez,praez,NA,unmatched
+Sarn Heinzenberg,Safien Platz,safien platz,NA,unmatched
+Sarn Heinzenberg,Sarn,sarn,NA,unmatched
+Sattel-Hochstuckli,Rothenthurm,rothenthurm,NA,unmatched
+Sattel-Hochstuckli,Sattel,sattel,NA,unmatched
+Schatzalp/Strela,Langwies,langwies,NA,unmatched
+Skilift Gurnigel-Bad,Rüti bei Riggisberg,rüti bei riggisberg,NA,unmatched
+Sommartel / Le Locle,Le Locle,le locle,NA,unmatched
+Springenboden,Horboden,horboden,NA,unmatched
+St. Margrethenberg,St. Margrethenberg,st margrethenberg,NA,unmatched
+St. Margrethenberg,Vadura,vadura,NA,unmatched
+Sternenberg,Sternen,sternen,NA,unmatched
+Sörenberg,Sörenberg,sörenberg,NA,unmatched
+Tramelan,Les Reussilles,les reussilles,NA,unmatched
+Tramelan,Mont-Crosin,mont crosin,NA,unmatched
+Tramelan,Mont-Tramelan,mont tramelan,NA,unmatched
+Tramelan,Tramelan,tramelan,NA,unmatched
+Unterbäch - Eischoll,Bürchen,bürchen,NA,unmatched
+Unterbäch - Eischoll,Eischoll,eischoll,NA,unmatched
+Unterbäch - Eischoll,Raron,raron,NA,unmatched
+Unterbäch - Eischoll,Unterbäch,unterbäch,NA,unmatched
+Visperterminen,Visperterminen,visperterminen,NA,unmatched
+Wirzweli,Dallenwil,dallenwil,NA,unmatched
+Wirzweli,Wiesenberg,wiesenberg,NA,unmatched
+Zugerberg,Walchwil,walchwil,NA,unmatched
+Zugerberg,Zugerberg,zugerberg,NA,unmatched
