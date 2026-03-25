@@ -316,7 +316,6 @@ mappa_sci <- leaflet(df_analisi) %>%
     opacity = 1
   )
 
-
 mappa_sci
 
 
