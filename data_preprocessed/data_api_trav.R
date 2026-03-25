@@ -15,11 +15,11 @@ raw <- fromJSON("data_raw/hotel_df.json")
 
 ds1 <- raw$dataset
 
-years <- names(ds$dimension$Jahr$category$index)
-months <- names(ds$dimension$Monat$category$index)
-gemeinden <- names(ds$dimension$Gemeinde$category$index)
-origin <- names(ds$dimension$Herkunftsland$category$index)
-indikator <- names(ds$dimension$Indikator$category$index)
+years <- names(ds1$dimension$Jahr$category$index)
+months <- names(ds1$dimension$Monat$category$index)
+gemeinden <- names(ds1$dimension$Gemeinde$category$index)
+origin <- names(ds1$dimension$Herkunftsland$category$index)
+indikator <- names(ds1$dimension$Indikator$category$index)
 
 df_hotellerie <- expand.grid(
   Jahr = years,
@@ -32,18 +32,30 @@ df_hotellerie <- expand.grid(
 )
 
 
-df_hotellerie$value <- ds$value
+df_hotellerie$value <- ds1$value
 
 
 df_hotellerie <- df_hotellerie %>%
   mutate(
     year = as.integer(Jahr),
     month = Monat,
-    month_label = ds$dimension$Monat$category$label[Monat],
+    month_label = ds1$dimension$Monat$category$label[Monat],
     municipality_id = as.integer(Gemeinde),
-    municipality = ds$dimension$Gemeinde$category$label[Gemeinde],
-    indicator = ds$dimension$Indikator$category$label[Indikator]
+    municipality = ds1$dimension$Gemeinde$category$label[Gemeinde],
+    indicator = ds1$dimension$Indikator$category$label[Indikator]
   )
+
+
+# funzione pulizia nomi
+clean_name <- function(x) {
+  x %>%
+    str_to_lower() %>%
+    str_replace_all("\\s*\\([^\\)]+\\)", "") %>%  # toglie (BE), (VS), ecc.
+    str_replace_all("[-/]", " ") %>%
+    str_replace_all("[[:punct:]]", " ") %>%
+    str_squish()
+}
+
 
 df_hotel <- expand.grid(
   Jahr = names(ds1$dimension$Jahr$category$index),
@@ -101,15 +113,6 @@ df_localities <- df_analysis %>%
   unnest(localities) %>%
   mutate(localities = str_trim(localities))
 
-# funzione pulizia nomi
-clean_name <- function(x) {
-  x %>%
-    str_to_lower() %>%
-    str_replace_all("\\s*\\([^\\)]+\\)", "") %>%  # toglie (BE), (VS), ecc.
-    str_replace_all("[-/]", " ") %>%
-    str_replace_all("[[:punct:]]", " ") %>%
-    str_squish()
-}
 
 # località (più completo)
 
@@ -355,5 +358,6 @@ df_analysis_final <- df_analysis %>%
 
 View(df_analysis_final)
 
-
+save(df_analysis_final, file= "data_preprocessed/df_analysis_final.rda")
+save(df_analysis_final, file= "data_preprocessed/df_analysis_final.csv")
 
